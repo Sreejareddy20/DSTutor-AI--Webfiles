@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DS Tutor AI - Onboarding</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: var(--deep-navy);
+            height: 100vh;
+            width: 100vw;
+            color: white;
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .onboarding-card {
+            width: 1000px;
+            max-width: 90%;
+            height: 700px;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1.5px solid rgba(255, 255, 255, 0.08);
+            border-radius: 48px;
+            padding: 80px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.4);
+            animation: cardEntrance 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes cardEntrance {
+            0% {
+                opacity: 0;
+                transform: scale(0.9) translateY(40px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .header {
+            position: absolute;
+            top: 40px;
+            left: 48px;
+            right: 48px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-brand {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--teal-green);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .header-skip {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--subtext);
+            cursor: pointer;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .header-skip:hover {
+            color: var(--teal-green);
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .illustration-box {
+            width: 200px;
+            height: 200px;
+            margin-bottom: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(16, 185, 129, 0.05);
+            border-radius: 56px;
+            border: 2px solid rgba(16, 185, 129, 0.2);
+            box-shadow: 0 20px 50px rgba(16, 185, 129, 0.1);
+            transition: all 0.5s ease;
+        }
+
+        .illustration-box i {
+            font-size: 80px;
+            color: var(--teal-green);
+            filter: drop-shadow(0 0 20px rgba(16, 185, 129, 0.4));
+        }
+
+        .content-box {
+            max-width: 650px;
+        }
+
+        .content-title {
+            font-size: 40px;
+            font-weight: 900;
+            color: white;
+            margin-bottom: 24px;
+            letter-spacing: -1px;
+        }
+
+        .content-text {
+            font-size: 18px;
+            color: var(--subtext);
+            line-height: 1.6;
+            font-weight: 500;
+            margin-bottom: 48px;
+        }
+
+        .indicator-group {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 48px;
+        }
+
+        .indicator-dot {
+            width: 10px;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .indicator-dot.active {
+            width: 36px;
+            border-radius: 10px;
+            background: var(--teal-green);
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
+        }
+
+        .next-btn {
+            background: var(--teal-green);
+            color: white;
+            padding: 16px 48px;
+            border-radius: 100px;
+            font-size: 16px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 10px 25px rgba(26, 142, 119, 0.2);
+        }
+
+        .next-btn:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 35px rgba(26, 142, 119, 0.3);
+            filter: brightness(1.1);
+        }
+
+        .footer-powered {
+            position: absolute;
+            bottom: 40px;
+            font-size: 11px;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.1);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="onboarding-card" id="card">
+        <div class="header">
+            <div class="header-brand">DS TUTOR AI</div>
+            <a href="signin.html" class="header-skip">Skip Entirely</a>
+        </div>
+
+        <div class="illustration-box" id="iconBox">
+            <i id="screenIcon" class="fa-solid fa-brain"></i>
+        </div>
+
+        <div class="content-box">
+            <h1 id="screenTitle" class="content-title">Professional AI Tutoring</h1>
+            <p id="screenText" class="content-text">Master any data structure through natural conversation with deep
+                technical accuracy and live coding support.</p>
+
+            <div class="indicator-group" id="indicatorContainer">
+                <div class="indicator-dot active"></div>
+                <div class="indicator-dot"></div>
+                <div class="indicator-dot"></div>
+                <div class="indicator-dot"></div>
+            </div>
+
+            <button class="next-btn" onclick="nextScreen()">
+                Continue Journey <i class="fa-solid fa-arrow-right"></i>
+            </button>
+        </div>
+
+        <div class="footer-powered">
+            ENHANCED TUTORING SYSTEM v1.0
+        </div>
+    </div>
+
+    <script>
+        const screens = [
+            {
+                icon: 'fa-brain',
+                title: 'Professional AI Tutoring',
+                text: 'Master any data structure through natural conversation with deep technical accuracy and live coding support.'
+            },
+            {
+                icon: 'fa-code',
+                title: 'Instant Production Code',
+                text: 'Generate optimized C++, Java, and Python solutions for complex structures in a single click.'
+            },
+            {
+                icon: 'fa-eye',
+                title: 'Step-by-Step Visualizer',
+                text: 'Witness how data behaves in real-time with cinematic interactive visualizations of common algorithms.'
+            },
+            {
+                icon: 'fa-graduation-cap',
+                title: 'Mastery Quizzes',
+                text: 'Test your retention with AI-generated challenges across four levels of increasing technical difficulty.'
+            }
+        ];
+
+        let currentIdx = 0;
+
+        function nextScreen() {
+            currentIdx++;
+            if (currentIdx >= screens.length) {
+                sessionStorage.setItem('onboardingSeenSession', 'true');
+                window.location.href = 'index.html';
+                return;
+            }
+
+            const screen = screens[currentIdx];
+
+            // Animation out
+            const card = document.getElementById('card');
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+
+            setTimeout(() => {
+                document.getElementById('screenIcon').className = `fa-solid ${screen.icon}`;
+                document.getElementById('screenTitle').innerText = screen.title;
+                document.getElementById('screenText').innerText = screen.text;
+
+                // Animation in
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+
+                // Indicators
+                const dots = document.querySelectorAll('.indicator-dot');
+                dots.forEach((dot, i) => {
+                    dot.classList.toggle('active', i === currentIdx);
+                });
+            }, 300);
+        }
+    </script>
+</body>
+
+</html>

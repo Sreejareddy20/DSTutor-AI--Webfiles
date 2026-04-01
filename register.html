@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DS Tutor AI - Create Account</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="config.js"></script>
+</head>
+
+<body>
+    <div class="auth-container">
+        <div class="auth-card animate-fade" style="text-align: left; padding: 48px 32px;">
+            <div style="margin-bottom: 32px;">
+                <div
+                    style="width: 80px; height: 80px; background: rgba(16, 185, 129, 0.1); border: 2px solid var(--teal-green); border-radius: 20px; display: flex; align-items: center; justify-content: center; margin-bottom: 24px;">
+                    <i class="fa-solid fa-brain" style="font-size: 40px; color: var(--teal-green);"></i>
+                </div>
+                <h1 style="font-size: 32px; font-weight: 800; color: var(--deep-navy);">Create Account</h1>
+                <p style="color: var(--subtext); font-size: 18px;">Sign up to start your journey</p>
+            </div>
+
+            <div class="input-group">
+                <label
+                    style="display: block; font-size: 16px; font-weight: 700; color: var(--deep-navy); margin-bottom: 8px;">Full
+                    Name</label>
+                <input type="text" id="nameInput" class="input-field" placeholder="Enter your full name"
+                    style="background: var(--bg-light); border: none;">
+            </div>
+
+            <div class="input-group">
+                <label
+                    style="display: block; font-size: 16px; font-weight: 700; color: var(--deep-navy); margin-bottom: 8px;">Email</label>
+                <input type="email" id="emailInput" class="input-field" placeholder="Enter your email"
+                    style="background: var(--bg-light); border: none;">
+            </div>
+
+            <div class="input-group">
+                <label
+                    style="display: block; font-size: 16px; font-weight: 700; color: var(--deep-navy); margin-bottom: 8px;">Password</label>
+                <div class="password-container">
+                    <input type="password" id="passwordInput" class="input-field" placeholder="Create a password"
+                        style="background: var(--bg-light); border: none;">
+                    <i class="fa-solid fa-eye password-toggle" id="togglePassword"
+                        onclick="toggleVisibility('passwordInput', 'togglePassword')"></i>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label
+                    style="display: block; font-size: 16px; font-weight: 700; color: var(--deep-navy); margin-bottom: 8px;">Confirm
+                    Password</label>
+                <div class="password-container">
+                    <input type="password" id="confirmInput" class="input-field" placeholder="Repeat your password"
+                        style="background: var(--bg-light); border: none;">
+                    <i class="fa-solid fa-eye password-toggle" id="toggleConfirm"
+                        onclick="toggleVisibility('confirmInput', 'toggleConfirm')"></i>
+                </div>
+            </div>
+
+            <button class="btn btn-primary" id="registerBtn" style="width: 100%; margin-bottom: 40px;"
+                onclick="handleRegister()">Register</button>
+
+            <div style="text-align: center;">
+                <p style="color: var(--subtext); font-size: 16px;">Already have an account? <a href="signin.html"
+                        style="color: var(--teal-green); font-weight: 800; text-decoration: none;">Login</a></p>
+            </div>
+
+            <div style="margin-top: 48px; text-align: center; font-size: 14px; color: var(--footer); font-weight: 600;">
+                Powered by SIMATS
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleVisibility(inputId, iconId) {
+            const input = document.getElementById(inputId);
+            const icon = document.getElementById(iconId);
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+
+        async function handleRegister() {
+            const name = document.getElementById('nameInput').value.trim();
+            const email = document.getElementById('emailInput').value.trim();
+            const password = document.getElementById('passwordInput').value.trim();
+            const confirm = document.getElementById('confirmInput').value.trim();
+            const registerBtn = document.getElementById('registerBtn');
+
+            // 1. Full Name Validation (Alphabets only)
+            const nameRegex = /^[A-Za-z\s]+$/;
+            if (!name || !nameRegex.test(name)) {
+                alert("Invalid credentials: Full Name should only contain alphabets.");
+                return;
+            }
+
+            // 2. Email Validation (Must end with @gmail.com)
+            if (!email || !email.endsWith("@gmail.com")) {
+                alert("Invalid credentials: Email must end with @gmail.com");
+                return;
+            }
+
+            // 3. Password Validation (Special char, capital, small, number, min 8)
+            const hasUpper = /[A-Z]/.test(password);
+            const hasLower = /[a-z]/.test(password);
+            const hasNumber = /\d/.test(password);
+            const hasSpecial = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+            const isLongEnough = password.length >= 8;
+
+            if (!password || !hasUpper || !hasLower || !hasNumber || !hasSpecial || !isLongEnough) {
+                alert("Invalid credentials: Password must contain a special character, capital letter, small letter, number, and be at least 8 characters long.");
+                return;
+            }
+
+            if (password !== confirm) {
+                alert("Passwords do not match.");
+                return;
+            }
+
+            registerBtn.innerText = "Processing...";
+            registerBtn.disabled = true;
+
+            try {
+                const response = await fetch(`${CONFIG.BASE_URL}/register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name: name, email: email, password: password })
+                });
+
+                const data = await response.json();
+                if (response.ok && data.message.includes("successfully")) {
+                    localStorage.setItem('tempEmail', email);
+                    alert("OTP sent to your email!");
+                    window.location.href = 'verify.html';
+                } else {
+                    alert(data.message || "Registration failed. Try again.");
+                }
+            } catch (error) {
+                alert("Connection error. Is the server running?");
+            } finally {
+                registerBtn.innerText = "Get Started";
+                registerBtn.disabled = false;
+            }
+        }
+    </script>
+</body>
+
+</html>

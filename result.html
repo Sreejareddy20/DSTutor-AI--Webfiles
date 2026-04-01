@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DS Tutor AI - Quiz Results</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="config.js"></script>
+    <style>
+        .result-page {
+            width: 100vw;
+            height: 100vh;
+            background: var(--bg-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .result-card-large {
+            width: 100%;
+            max-width: 1000px;
+            background: var(--white);
+            border-radius: 40px;
+            padding: 80px;
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.05);
+            text-align: center;
+        }
+
+        .trophy-icon-box {
+            width: 160px;
+            height: 160px;
+            background: #FFFAEB;
+            border-radius: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 48px auto;
+            animation: bounceIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes bounceIn {
+            from {
+                transform: scale(0);
+            }
+
+            to {
+                transform: scale(1);
+            }
+        }
+
+        .score-display-large {
+            font-size: 80px;
+            font-weight: 800;
+            color: var(--teal-green);
+            margin-bottom: 8px;
+        }
+
+        .score-meta-large {
+            font-size: 20px;
+            color: var(--subtext);
+            margin-bottom: 48px;
+            font-weight: 600;
+        }
+
+        .feedback-box-wide {
+            background: #F1F5F9;
+            padding: 32px;
+            border-radius: 20px;
+            margin-bottom: 64px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="result-page">
+        <div class="result-card-large animate-fade">
+            <div class="trophy-icon-box">
+                <i class="fa-solid fa-trophy" style="font-size: 80px; color: #F59E0B;"></i>
+            </div>
+
+            <h1 id="resultTitle" style="font-size: 42px; margin-bottom: 8px;">Congratulations!</h1>
+            <p id="categoryName" style="color: var(--subtext); font-size: 20px; margin-bottom: 48px;">Mastered Linear
+                Data Structures</p>
+
+            <div class="score-display-large" id="finalScore">4/5</div>
+            <div class="score-meta-large">Achievement Unlocked!</div>
+
+            <div class="feedback-box-wide">
+                <h3 id="msg" style="margin-bottom: 4px; font-size: 20px;">Outstanding Work!</h3>
+                <p id="desc" style="color: var(--subtext);">You've demonstrated a solid grasp of this topic with minimal
+                    errors.</p>
+            </div>
+
+            <div style="display: flex; gap: 24px; justify-content: center;">
+                <button class="btn btn-primary" onclick="window.location.href='practice.html'"
+                    style="padding: 0 64px;">Finish Journey</button>
+                <button class="btn btn-outline" onclick="window.location.href='quiz.html'"
+                    style="padding: 0 48px;">Retake Quiz</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const result = JSON.parse(localStorage.getItem('quizResult')) || { score: 0, total: 5, category: "Linear Structures" };
+        document.getElementById('finalScore').innerText = `${result.score}/${result.total}`;
+        const pct = (result.score / result.total) * 100;
+
+        const msgEl = document.getElementById('msg');
+        const descEl = document.getElementById('desc');
+        const titleEl = document.getElementById('resultTitle');
+
+        if (pct === 100) {
+            titleEl.innerText = "Perfect Score!";
+            msgEl.innerText = "Master Level Achieved!";
+            descEl.innerText = "You correctly answered every single question. You are truly an expert.";
+        } else if (pct >= 80) {
+            msgEl.innerText = "Excellent Performance!";
+            descEl.innerText = "You have a deep understanding of the concepts with very few mistakes.";
+        } else if (pct >= 50) {
+            msgEl.innerText = "Good Effort!";
+            descEl.innerText = "You've got the basics down, but a bit more study will make you perfect.";
+        } else {
+            titleEl.innerText = "Keep Practicing!";
+            msgEl.innerText = "Room for Improvement.";
+            descEl.innerText = "Review the topic overview and try the visualizer to understand the concepts better.";
+        }
+    </script>
+</body>
+
+</html>

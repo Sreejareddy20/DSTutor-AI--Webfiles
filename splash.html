@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DS Tutor AI - Launching...</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: var(--deep-navy);
+            /* Reverting to original Deep Navy */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            width: 100vw;
+            color: white;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .splash-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .brain-logo {
+            font-size: 100px;
+            color: var(--teal-green);
+            margin-bottom: 32px;
+            filter: drop-shadow(0 0 30px rgba(16, 185, 129, 0.5));
+            animation: pulseBrain 2s infinite ease-in-out;
+        }
+
+        @keyframes pulseBrain {
+            0% {
+                transform: scale(1);
+                filter: drop-shadow(0 0 20px rgba(16, 185, 129, 0.4));
+            }
+
+            50% {
+                transform: scale(1.1);
+                filter: drop-shadow(0 0 50px rgba(16, 185, 129, 0.8));
+            }
+
+            100% {
+                transform: scale(1);
+                filter: drop-shadow(0 0 20px rgba(16, 185, 129, 0.4));
+            }
+        }
+
+        .splash-title {
+            font-size: 48px;
+            font-weight: 900;
+            letter-spacing: -1.5px;
+            margin-bottom: 8px;
+        }
+
+        .splash-subtitle {
+            font-size: 18px;
+            color: var(--subtext);
+            font-weight: 500;
+            margin-bottom: 48px;
+        }
+
+        .loader-bar {
+            width: 240px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 100px;
+            overflow: hidden;
+        }
+
+        .loader-fill {
+            height: 100%;
+            width: 0%;
+            background: var(--teal-green);
+            animation: loadProgress 2.5s cubic-bezier(0.1, 0.5, 0.1, 1) forwards;
+        }
+
+        @keyframes loadProgress {
+            0% {
+                width: 0%;
+            }
+
+            100% {
+                width: 100%;
+            }
+        }
+
+        .footer-powered {
+            position: absolute;
+            bottom: 48px;
+            font-size: 12px;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.3);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="splash-container">
+        <i class="fa-solid fa-brain brain-logo"></i>
+        <h1 class="splash-title">DS Tutor AI</h1>
+        <p class="splash-subtitle">Premium Data Structures Training Platform</p>
+
+        <div class="loader-bar">
+            <div class="loader-fill"></div>
+        </div>
+    </div>
+
+    <div class="footer-powered">
+        POWERED BY SIMATS
+    </div>
+
+    <script>
+        setTimeout(() => {
+            // For dev testing, we'll force it to show onboarding at least once per session
+            const hasSeenOnboarding = sessionStorage.getItem('onboardingSeenSession');
+            if (hasSeenOnboarding) {
+                window.location.href = 'index.html';
+            } else {
+                window.location.href = 'onboarding.html';
+            }
+        }, 3000);
+    </script>
+</body>
+
+</html>

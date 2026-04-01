@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DS Tutor AI - Interactive Visualizers</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .viz-layout {
+            display: grid;
+            grid-template-columns: 1fr 340px;
+            gap: 48px;
+        }
+
+        .canvas-area {
+            background: white;
+            border-radius: 40px;
+            border: 2px solid var(--border);
+            min-height: 600px;
+            padding: 80px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 60px rgba(0, 0, 0, 0.03);
+        }
+
+        .node-container {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            align-items: center;
+            min-height: 300px;
+            width: 100%;
+            perspective: 1000px;
+        }
+
+        .node {
+            width: 80px;
+            height: 80px;
+            background: var(--teal-green);
+            color: white;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 800;
+            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            animation: nodePop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes nodePop {
+            0% {
+                transform: scale(0.5) rotate(-10deg);
+                opacity: 0;
+            }
+
+            100% {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+            }
+        }
+
+        .node.highlight {
+            background: #3B82F6;
+            transform: scale(1.2) translateY(-10px);
+            box-shadow: 0 20px 40px rgba(59, 130, 246, 0.4);
+            z-index: 10;
+        }
+
+        .node.removal {
+            transform: scale(0.2) translateY(-100px);
+            opacity: 0;
+        }
+
+        .stack-view {
+            flex-direction: column-reverse !important;
+            gap: 12px;
+        }
+
+        .queue-view {
+            flex-direction: row-reverse !important;
+        }
+
+        .controls-card {
+            background: white;
+            border-radius: 32px;
+            border: 2px solid var(--border);
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+            height: fit-content;
+        }
+
+        .status-pill {
+            padding: 16px 24px;
+            background: #F0FDFA;
+            color: var(--teal-green);
+            border-radius: 16px;
+            font-size: 15px;
+            font-weight: 700;
+            border: 1px solid #CCFBF1;
+            margin-bottom: 32px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .complexity-card {
+            background: #F8FAFC;
+            padding: 24px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+        }
+
+        .complexity-card h4 {
+            font-size: 13px;
+            font-weight: 800;
+            color: #64748B;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+            letter-spacing: 1px;
+        }
+
+        .canvas-label {
+            position: absolute;
+            top: 24px;
+            left: 24px;
+            font-size: 13px;
+            font-weight: 900;
+            color: var(--border);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <a href="topics.html" class="sidebar-logo">
+                <i class="fa-solid fa-brain" style="color: var(--teal-green);"></i>
+                <span style="color: var(--deep-navy); font-weight: 800;">DS Tutor AI</span>
+            </a>
+
+            <nav class="nav-menu">
+                <a href="chat.html" class="nav-link">
+                    <i class="fa-solid fa-message"></i>
+                    <span>Chat</span>
+                </a>
+                <a href="topics.html" class="nav-link">
+                    <i class="fa-solid fa-book-open"></i>
+                    <span>Topics</span>
+                </a>
+                <a href="visualizer.html" class="nav-link">
+                    <i class="fa-solid fa-eye"></i>
+                    <span>Visualizer</span>
+                </a>
+                <a href="practice.html" class="nav-link">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                    <span>Practice</span>
+                </a>
+                <a href="profile.html" class="nav-link">
+                    <i class="fa-solid fa-user"></i>
+                    <span>Profile</span>
+                </a>
+            </nav>
+
+            <div style="margin-top: auto; padding-top: 24px; text-align: center;">
+                <p style="color: var(--footer); font-size: 14px; font-weight: 600;">Powered by SIMATS</p>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content animate-fade">
+            <div class="back-btn" onclick="history.back()">
+                <i class="fa-solid fa-arrow-left"></i><span>Back</span>
+            </div>
+
+            <header style="margin-bottom: 48px;">
+                <h1>Algorithm Visualizer</h1>
+                <p style="color: var(--subtext);">Watch how data structures behave in real-time.</p>
+            </header>
+
+            <div class="viz-layout">
+                <div>
+                    <div id="status" class="status-pill">
+                        <i class="fa-solid fa-circle-info"></i>
+                        <span id="statusText">Select a structure to begin simulation...</span>
+                    </div>
+                    <div class="canvas-area">
+                        <div class="canvas-label">Simulation Canvas v1.0</div>
+                        <div id="canvas" class="node-container">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="controls-card">
+                    <div>
+                        <label
+                            style="display: block; font-size: 12px; font-weight: 900; color: #94A3B8; margin-bottom: 16px; text-transform: uppercase;">Structure
+                            Select</label>
+                        <select id="vizType" class="input-field" style="height: 56px;" onchange="initViz()">
+                            <option value="stack">Stack (LIFO)</option>
+                            <option value="queue">Queue (FIFO)</option>
+                            <option value="linkedlist">Linked List</option>
+                            <option value="bubble">Bubble Sort</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label
+                            style="display: block; font-size: 12px; font-weight: 900; color: #94A3B8; margin-bottom: 16px; text-transform: uppercase;">Manual
+                            Control</label>
+                        <div style="display: flex; gap: 12px; margin-bottom: 16px;">
+                            <input type="number" id="valInput" class="input-field" style="margin: 0;" placeholder="Val">
+                            <button class="btn btn-primary" style="height: 56px; padding: 0 24px;"
+                                onclick="addItem()">Add</button>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px;">
+                            <button class="btn btn-outline" style="height: 56px; border-color: #EF4444; color: #EF4444;"
+                                id="removeBtn" onclick="removeItem()">Pop</button>
+                            <button class="btn btn-outline" style="height: 56px;" onclick="stepAnim()">Step</button>
+                        </div>
+                        <button class="btn btn-outline" style="width: 100%; height: 56px;" onclick="initViz()">Reset
+                            Simulation</button>
+                    </div>
+
+                    <div class="complexity-card">
+                        <h4>Efficiency Specs</h4>
+                        <div id="complexity"
+                            style="font-size: 15px; color: var(--deep-navy); font-weight: 600; line-height: 2;">
+                            Push: O(1)<br>Pop: O(1)<br>Peek: O(1)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        let items = [10, 20, 30];
+        const canvas = document.getElementById('canvas');
+        const statusText = document.getElementById('statusText');
+        const typeSelect = document.getElementById('vizType');
+
+        function initViz() {
+            const type = typeSelect.value;
+            items = (type === 'bubble') ? [67, 34, 12, 98, 45] : [10, 20, 30];
+
+            const removeBtn = document.getElementById('removeBtn');
+            const comp = document.getElementById('complexity');
+
+            if (type === 'stack') {
+                removeBtn.innerText = "Pop";
+                comp.innerHTML = "Push: O(1)<br>Pop: O(1)<br>Space: O(n)";
+            } else if (type === 'queue') {
+                removeBtn.innerText = "Dequeue";
+                comp.innerHTML = "Enqueue: O(1)<br>Dequeue: O(1)<br>Space: O(n)";
+            } else if (type === 'linkedlist') {
+                removeBtn.innerText = "Delete";
+                comp.innerHTML = "Insert: O(1)<br>Delete: O(n)<br>Search: O(n)";
+            } else {
+                removeBtn.innerText = "Sort Step";
+                comp.innerHTML = "Worst: O(n²)<br>Best: O(n)<br>Space: O(1)";
+            }
+
+            statusText.innerText = `Switched to ${type.toUpperCase()} mode.`;
+            render();
+        }
+
+        function render() {
+            canvas.innerHTML = '';
+            const type = typeSelect.value;
+            canvas.className = `node-container ${type}-view`;
+
+            items.forEach((val, i) => {
+                const node = document.createElement('div');
+                node.className = 'node';
+                node.innerText = val;
+
+                if (type === 'linkedlist' && i < items.length - 1) {
+                    node.style.marginRight = '50px';
+                    const arrow = document.createElement('div');
+                    arrow.innerHTML = '➞';
+                    arrow.style.position = 'absolute';
+                    arrow.style.right = '-45px';
+                    arrow.style.color = 'var(--teal-green)';
+                    arrow.style.fontSize = '32px';
+                    node.appendChild(arrow);
+                }
+
+                if (type === 'bubble') {
+                    node.style.height = `${val * 3 + 20}px`;
+                    node.style.borderRadius = '16px 16px 0 0';
+                    node.style.alignItems = 'flex-end';
+                    node.style.paddingBottom = '10px';
+                }
+
+                canvas.appendChild(node);
+            });
+        }
+
+        function addItem() {
+            const input = document.getElementById('valInput');
+            const val = input.value;
+            if (!val) return;
+
+            items.push(parseInt(val));
+            statusText.innerText = `Successfully inserted ${val}.`;
+            render();
+            input.value = '';
+        }
+
+        function removeItem() {
+            if (items.length === 0) return;
+            const type = typeSelect.value;
+            const nodes = document.querySelectorAll('.node');
+
+            if (type === 'stack') {
+                const target = nodes[nodes.length - 1];
+                target.classList.add('removal');
+                setTimeout(() => { items.pop(); render(); }, 400);
+            } else if (type === 'queue') {
+                const target = nodes[0];
+                target.classList.add('removal');
+                setTimeout(() => { items.shift(); render(); }, 400);
+            } else {
+                stepAnim();
+            }
+        }
+
+        function stepAnim() {
+            const type = typeSelect.value;
+            const nodes = document.querySelectorAll('.node');
+            if (nodes.length < 2) return;
+
+            const i = Math.floor(Math.random() * (nodes.length - 1));
+            nodes[i].classList.add('highlight');
+            nodes[i + 1].classList.add('highlight');
+
+            statusText.innerText = `Analyzing values: ${items[i]} and ${items[i + 1]}`;
+
+            setTimeout(() => {
+                if (type === 'bubble' && items[i] > items[i + 1]) {
+                    const temp = items[i];
+                    items[i] = items[i + 1];
+                    items[i + 1] = temp;
+                    statusText.innerText = `Swapping ${items[i + 1]} and ${items[i]}`;
+                    render();
+                }
+                nodes[i].classList.remove('highlight');
+                nodes[i + 1].classList.remove('highlight');
+            }, 600);
+        }
+
+        initViz();
+    </script>
+</body>
+
+</html>

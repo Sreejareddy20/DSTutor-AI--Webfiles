@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DS Tutor AI - Practice & Quizzes</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="config.js"></script>
+    <style>
+        .practice-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 32px;
+            margin-top: 48px;
+        }
+
+        .practice-card {
+            background: var(--white);
+            padding: 40px;
+            border-radius: 32px;
+            border: 1.5px solid var(--border);
+            text-align: left;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            display: flex;
+            align-items: flex-start;
+            gap: 32px;
+        }
+
+        .practice-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.06);
+            border-color: var(--teal-green);
+        }
+
+        .practice-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            flex-shrink: 0;
+        }
+
+        .practice-info {
+            flex: 1;
+        }
+
+        .practice-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 100px;
+            background: #F1F5F9;
+            color: #64748B;
+            font-size: 12px;
+            font-weight: 800;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <a href="topics.html" class="sidebar-logo">
+                <i class="fa-solid fa-brain" style="color: var(--teal-green);"></i>
+                <span style="color: var(--deep-navy); font-weight: 800;">DS Tutor AI</span>
+            </a>
+
+            <nav class="nav-menu">
+                <a href="chat.html" class="nav-link">
+                    <i class="fa-solid fa-message"></i>
+                    <span>Chat</span>
+                </a>
+                <a href="topics.html" class="nav-link">
+                    <i class="fa-solid fa-book-open"></i>
+                    <span>Topics</span>
+                </a>
+                <a href="visualizer.html" class="nav-link">
+                    <i class="fa-solid fa-eye"></i>
+                    <span>Visualizer</span>
+                </a>
+                <a href="practice.html" class="nav-link active">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                    <span>Practice</span>
+                </a>
+                <a href="profile.html" class="nav-link">
+                    <i class="fa-solid fa-user"></i>
+                    <span>Profile</span>
+                </a>
+            </nav>
+
+            <div style="margin-top: auto; padding-top: 24px; text-align: center;">
+                <p style="color: var(--footer); font-size: 14px; font-weight: 600;">Powered by SIMATS</p>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content animate-fade">
+            <div class="back-btn" onclick="history.back()">
+                <i class="fa-solid fa-arrow-left"></i>
+                <span>Back</span>
+            </div>
+            <header>
+                <div>
+                    <h1>Practice Zone</h1>
+                    <p style="color: var(--subtext);">Test your knowledge and level up your skills.</p>
+                </div>
+            </header>
+
+            <div class="practice-grid">
+                <!-- Linear -->
+                <div class="practice-card" onclick="startQuiz('Linear Data Structures')">
+                    <div class="practice-icon" style="background: #F0F9F6;">
+                        <i class="fa-solid fa-box" style="color: #10B981;"></i>
+                    </div>
+                    <div class="practice-info">
+                        <div class="practice-badge">Fundamental</div>
+                        <h3 style="font-size: 24px; font-weight: 800; margin-bottom: 8px;">Linear Data Structures</h3>
+                        <p style="color: var(--subtext); font-size: 16px; margin-bottom: 24px;">40 Questions on Arrays,
+                            Stacks, Queues and Lists.</p>
+                        <button class="btn btn-outline" style="height: 48px; padding: 0 24px;">Start Quiz <i
+                                class="fa-solid fa-arrow-right" style="margin-left: 8px;"></i></button>
+                    </div>
+                </div>
+
+                <!-- Hierarchical -->
+                <div class="practice-card" onclick="startQuiz('Hierarchical Structures')">
+                    <div class="practice-icon" style="background: #FDF4FF;">
+                        <i class="fa-solid fa-diagram-project" style="color: #C026D3;"></i>
+                    </div>
+                    <div class="practice-info">
+                        <div class="practice-badge">Advanced</div>
+                        <h3 style="font-size: 24px; font-weight: 800; margin-bottom: 8px;">Hierarchical Structures</h3>
+                        <p style="color: var(--subtext); font-size: 16px; margin-bottom: 24px;">30 Questions on Binary
+                            Trees, BST, Heaps and Tries.</p>
+                        <button class="btn btn-outline" style="height: 48px; padding: 0 24px;">Start Quiz <i
+                                class="fa-solid fa-arrow-right" style="margin-left: 8px;"></i></button>
+                    </div>
+                </div>
+
+                <!-- Non-Linear -->
+                <div class="practice-card" onclick="startQuiz('Non-Linear Structures')">
+                    <div class="practice-icon" style="background: #FFFBEB;">
+                        <i class="fa-solid fa-circle-nodes" style="color: #D97706;"></i>
+                    </div>
+                    <div class="practice-info">
+                        <div class="practice-badge">Expert</div>
+                        <h3 style="font-size: 24px; font-weight: 800; margin-bottom: 8px;">Non-Linear Structures</h3>
+                        <p style="color: var(--subtext); font-size: 16px; margin-bottom: 24px;">25 Questions on Graphs,
+                            Adj-List, and Networks.</p>
+                        <button class="btn btn-outline" style="height: 48px; padding: 0 24px;">Start Quiz <i
+                                class="fa-solid fa-arrow-right" style="margin-left: 8px;"></i></button>
+                    </div>
+                </div>
+
+                <!-- Algorithms -->
+                <div class="practice-card" onclick="startQuiz('Algorithms')">
+                    <div class="practice-icon" style="background: #EFF6FF;">
+                        <i class="fa-solid fa-chart-simple" style="color: #3B82F6;"></i>
+                    </div>
+                    <div class="practice-info">
+                        <div class="practice-badge">General</div>
+                        <h3 style="font-size: 24px; font-weight: 800; margin-bottom: 8px;">Algorithms</h3>
+                        <p style="color: var(--subtext); font-size: 16px; margin-bottom: 24px;">25 Questions on Sorting,
+                            Searching and Complexity.</p>
+                        <button class="btn btn-outline" style="height: 48px; padding: 0 24px;">Start Quiz <i
+                                class="fa-solid fa-arrow-right" style="margin-left: 8px;"></i></button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        function startQuiz(category) {
+            localStorage.setItem('selectedCategory', category);
+            window.location.href = 'quiz.html';
+        }
+    </script>
+</body>
+
+</html>

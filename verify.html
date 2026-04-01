@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DS Tutor AI - Verify OTP</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="config.js"></script>
+    <style>
+        .verify-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            background: #F8F9FA;
+        }
+
+        .verify-card {
+            background: white;
+            padding: 60px 40px;
+            border-radius: 32px;
+            width: 100%;
+            max-width: 480px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.05);
+            position: relative;
+        }
+
+        .back-btn-top {
+            position: absolute;
+            top: 24px;
+            left: 24px;
+            width: 48px;
+            height: 48px;
+            background: #F1F5F9;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--deep-navy);
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+
+        .otp-title {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--deep-navy);
+            margin-bottom: 12px;
+            margin-top: 20px;
+        }
+
+        .otp-subtitle {
+            color: var(--subtext);
+            font-size: 16px;
+            margin-bottom: 48px;
+        }
+
+        .otp-grid {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 48px;
+        }
+
+        .otp-box {
+            width: 52px;
+            height: 52px;
+            background: #F1F5F9;
+            border: none;
+            border-radius: 12px;
+            text-align: center;
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--deep-navy);
+            transition: all 0.2s;
+        }
+
+        .otp-box:focus {
+            background: white;
+            box-shadow: 0 0 0 2px var(--teal-green);
+            outline: none;
+        }
+
+        .btn-large {
+            width: 100%;
+            height: 60px;
+            background: var(--teal-green);
+            color: white;
+            border: none;
+            border-radius: 16px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 32px;
+        }
+
+        .btn-large:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        .resend-text {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--deep-navy);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .resend-timer {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--subtext);
+        }
+
+        .footer-brand {
+            font-size: 14px;
+            color: #94A3B8;
+            font-weight: 600;
+            margin-top: 64px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="verify-container">
+        <div class="verify-card animate-fade">
+            <a href="forgot_password.html" class="back-btn-top">
+                <i class="fa-solid fa-arrow-left"></i>
+            </a>
+
+            <h1 class="otp-title">Verify OTP</h1>
+            <p id="otpSubtitle" class="otp-subtitle">Enter the 6 digit OTP sent to your email</p>
+
+            <div class="otp-grid">
+                <input type="text" maxlength="1" class="otp-box">
+                <input type="text" maxlength="1" class="otp-box">
+                <input type="text" maxlength="1" class="otp-box">
+                <input type="text" maxlength="1" class="otp-box">
+                <input type="text" maxlength="1" class="otp-box">
+                <input type="text" maxlength="1" class="otp-box">
+            </div>
+
+            <button class="btn-large" id="verifyBtn" onclick="handleVerify()">Verify OTP</button>
+
+            <div id="resendContainer">
+                <span id="timerText" class="resend-timer">Resend OTP in 60s</span>
+            </div>
+
+            <div class="footer-brand">
+                Powered by SIMATS
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const email = localStorage.getItem('tempEmail') || 'your email';
+        const isReset = localStorage.getItem('resetMode') === 'true';
+        document.getElementById('otpSubtitle').innerText = `Enter the 6 digit OTP sent to ${email}`;
+
+        // OTP Input Auto-focus
+        const inputs = document.querySelectorAll('.otp-box');
+        inputs.forEach((input, index) => {
+            input.addEventListener('input', (e) => {
+                if (e.target.value.length >= 1 && index < inputs.length - 1) {
+                    inputs[index + 1].focus();
+                }
+            });
+
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Backspace' && e.target.value.length === 0 && index > 0) {
+                    inputs[index - 1].focus();
+                }
+            });
+        });
+
+        // Timer Logic
+        let timeLeft = 60;
+        const timerText = document.getElementById('timerText');
+        const interval = setInterval(() => {
+            timeLeft--;
+            if (timeLeft <= 0) {
+                clearInterval(interval);
+                timerText.innerText = "Resend OTP";
+                timerText.className = "resend-text";
+                timerText.onclick = resendOtp;
+            } else {
+                timerText.innerText = `Resend OTP in ${timeLeft}s`;
+            }
+        }, 1000);
+
+        async function handleVerify() {
+            const otp = Array.from(inputs).map(input => input.value).join('');
+            if (otp.length < 6) {
+                alert("Please enter the full 6-digit code.");
+                return;
+            }
+
+            const verifyBtn = document.getElementById('verifyBtn');
+            verifyBtn.innerText = "Verifying...";
+            verifyBtn.disabled = true;
+
+            try {
+                // Call verify_otp (or verify_reset_otp - both work now)
+                const endpoint = isReset ? 'verify_reset_otp' : 'verify_otp';
+                const response = await fetch(`${CONFIG.BASE_URL}/${endpoint}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: email, otp: otp })
+                });
+
+                const data = await response.json();
+                if (response.ok && data.message === "OTP Verified") {
+                    alert("OTP verified successfully!");
+                    if (isReset) {
+                        window.location.href = 'reset_password.html';
+                    } else {
+                        window.location.href = 'signin.html';
+                    }
+                } else {
+                    alert(data.message || "Invalid OTP. Please try again.");
+                }
+            } catch (error) {
+                alert("Connection error: " + error.message);
+            } finally {
+                verifyBtn.innerText = "Verify OTP";
+                verifyBtn.disabled = false;
+            }
+        }
+
+        async function resendOtp() {
+            // Logic to re-trigger OTP sending (calls /forgot_password or /register)
+            alert("OTP has been resent to " + email);
+            location.reload();
+        }
+    </script>
+</body>
+
+</html>

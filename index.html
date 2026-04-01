@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DS Tutor AI - Master Data Structures</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: var(--deep-navy);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Inter', sans-serif;
+            color: white;
+        }
+
+        .hero-container {
+            text-align: center;
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .logo-box {
+            width: 120px;
+            height: 120px;
+            background: rgba(16, 185, 129, 0.1);
+            border: 2px solid var(--teal-green);
+            border-radius: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 40px;
+            box-shadow: 0 0 40px rgba(16, 185, 129, 0.2);
+            animation: logoPulse 3s infinite alternate;
+        }
+
+        @keyframes logoPulse {
+            from {
+                box-shadow: 0 0 30px rgba(16, 185, 129, 0.2);
+                transform: scale(1);
+            }
+
+            to {
+                box-shadow: 0 0 60px rgba(16, 185, 129, 0.4);
+                transform: scale(1.05);
+            }
+        }
+
+        .logo-box i {
+            font-size: 56px;
+            color: var(--teal-green);
+        }
+
+        .hero-title {
+            font-size: 40px;
+            font-weight: 900;
+            margin-bottom: 12px;
+            letter-spacing: -1px;
+        }
+
+        .hero-subtitle {
+            font-size: 18px;
+            color: var(--subtext);
+            margin-bottom: 64px;
+            font-weight: 500;
+        }
+
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .btn-landing {
+            width: 100%;
+            height: 60px;
+            border-radius: 16px;
+            font-size: 17px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary-landing {
+            background: var(--teal-green);
+            color: white;
+            border: none;
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.2);
+        }
+
+        .btn-primary-landing:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 40px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-secondary-landing {
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-secondary-landing:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .footer-tag {
+            margin-top: 80px;
+            font-size: 12px;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.2);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="hero-container animate-fade">
+        <div class="logo-box">
+            <i class="fa-solid fa-brain"></i>
+        </div>
+
+        <h1 class="hero-title">DS Tutor AI</h1>
+        <p class="hero-subtitle">Premium AI Tutoring for Data Structures and Algorithms</p>
+
+        <div class="btn-group">
+            <a href="onboarding.html" class="btn-landing btn-primary-landing">Launch Experience</a>
+            <a href="signin.html" class="btn-landing btn-secondary-landing">Sign In</a>
+        </div>
+
+        <div class="footer-tag">
+            Powered by SIMATS Research
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DS Tutor AI - Topic Explorer</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="config.js"></script>
+    <style>
+        .topic-header {
+            margin-bottom: 32px;
+        }
+
+        .topic-header h1 {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--deep-navy);
+            margin-bottom: 8px;
+        }
+
+        .topic-header p {
+            font-size: 16px;
+            color: var(--subtext);
+        }
+
+        .search-box-container {
+            position: relative;
+            margin-bottom: 40px;
+            max-width: 100%;
+        }
+
+        .search-box-container i {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--footer);
+        }
+
+        .search-input {
+            width: 100%;
+            height: 56px;
+            background: var(--bg-light);
+            border: none;
+            border-radius: 12px;
+            padding-left: 48px;
+            font-size: 16px;
+            color: var(--deep-navy);
+            outline: none;
+        }
+
+        .category-header {
+            margin-top: 32px;
+            margin-bottom: 16px;
+        }
+
+        .category-header h3 {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--deep-navy);
+        }
+
+        .category-header p {
+            font-size: 14px;
+            color: var(--subtext);
+        }
+
+        .topic-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
+            margin-bottom: 48px;
+        }
+
+        .topic-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 140px;
+        }
+
+        .topic-card:hover {
+            border-color: var(--teal-green);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .topic-icon-box {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 12px;
+        }
+
+        .topic-card-title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 4px;
+        }
+
+        .topic-card-title h4 {
+            font-size: 16px;
+            font-weight: 800;
+            color: var(--deep-navy);
+        }
+
+        .topic-card-title i {
+            font-size: 14px;
+            color: #D1D5DB;
+        }
+
+        .topic-card-desc {
+            font-size: 12px;
+            color: var(--subtext);
+            line-height: 1.5;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <a href="topics.html" class="sidebar-logo">
+                <i class="fa-solid fa-brain" style="color: var(--teal-green);"></i>
+                <span style="color: var(--deep-navy); font-weight: 800;">DS Tutor AI</span>
+            </a>
+
+            <nav class="nav-menu">
+                <a href="chat.html" class="nav-link">
+                    <i class="fa-solid fa-message"></i>
+                    <span>Chat</span>
+                </a>
+                <a href="topics.html" class="nav-link active">
+                    <i class="fa-solid fa-book-open"></i>
+                    <span>Topics</span>
+                </a>
+                <a href="visualizer.html" class="nav-link">
+                    <i class="fa-solid fa-eye"></i>
+                    <span>Visualizer</span>
+                </a>
+                <a href="practice.html" class="nav-link">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                    <span>Practice</span>
+                </a>
+                <a href="profile.html" class="nav-link">
+                    <i class="fa-solid fa-user"></i>
+                    <span>Profile</span>
+                </a>
+            </nav>
+
+            <div style="margin-top: auto; padding-top: 24px; text-align: center;">
+                <p style="color: var(--footer); font-size: 14px; font-weight: 600;">Powered by SIMATS</p>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content animate-fade">
+            <div class="topic-header">
+                <h1>Topic Explorer</h1>
+                <p>Explore data structures by category</p>
+            </div>
+
+            <div class="search-box-container">
+                <i class="fa-solid fa-search"></i>
+                <input type="text" id="searchInput" class="search-input" placeholder="Search topics..."
+                    oninput="handleSearch()">
+            </div>
+
+            <div id="topicsContainer">
+                <!-- Dynamically Populated -->
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const topics = [
+            { name: "Array", desc: "Fixed-size sequential collection", icon: "fa-box", bg: "#E3F2FD", color: "#2196F3", category: "Linear Data Structures" },
+            { name: "Stack", desc: "LIFO principle structure", icon: "fa-layer-group", bg: "#F3E5F5", color: "#9C27B0", category: "Linear Data Structures" },
+            { name: "Queue", desc: "FIFO principle structure", icon: "fa-list-ol", bg: "#E0F2F1", color: "#009688", category: "Linear Data Structures" },
+            { name: "Linked List", desc: "Dynamic linear structure", icon: "fa-link", bg: "#E8F5E9", color: "#4CAF50", category: "Linear Data Structures" },
+            { name: "Binary Tree", desc: "Nodes with max 2 children", icon: "fa-diagram-project", bg: "#FFFDE7", color: "#B7950B", category: "Hierarchical Structures" },
+            { name: "BST", desc: "Sorted binary tree", icon: "fa-sitemap", bg: "#FFF7ED", color: "#EA580C", category: "Hierarchical Structures" },
+            { name: "Heap", desc: "Complete binary tree", icon: "fa-database", bg: "#F5F3FF", color: "#7C3AED", category: "Hierarchical Structures" },
+            { name: "Graph", desc: "Vertices and edges", icon: "fa-circle-nodes", bg: "#FDF2F2", color: "#EF4444", category: "Non-Linear Structures" },
+            { name: "Sorting", desc: "Ordering elements", icon: "fa-chart-simple", bg: "#ECFDF5", color: "#059669", category: "Algorithms" },
+            { name: "Searching", desc: "Finding elements", icon: "fa-magnifying-glass", bg: "#FFF1F2", color: "#E11D48", category: "Algorithms" }
+        ];
+
+        const categoryDescs = {
+            "Linear Data Structures": "Sequential arrangement of data elements",
+            "Hierarchical Structures": "Tree-based data organization",
+            "Non-Linear Structures": "Complex relationships and connections",
+            "Algorithms": "Step-by-step procedures for calculations"
+        };
+
+        function render(filtered) {
+            const container = document.getElementById('topicsContainer');
+            container.innerHTML = '';
+
+            const categories = [...new Set(filtered.map(t => t.category))];
+
+            categories.forEach(cat => {
+                const header = document.createElement('div');
+                header.className = 'category-header';
+                header.innerHTML = `<h3>${cat}</h3><p>${categoryDescs[cat] || ''}</p>`;
+                container.appendChild(header);
+
+                const grid = document.createElement('div');
+                grid.className = 'topic-grid';
+
+                filtered.filter(t => t.category === cat).forEach(topic => {
+                    grid.innerHTML += `
+                        <div class="topic-card" onclick="openTopic('${topic.name}')">
+                            <div class="topic-icon-box" style="background: ${topic.bg};">
+                                <i class="fa-solid ${topic.icon}" style="color: ${topic.color};"></i>
+                            </div>
+                            <div>
+                                <div class="topic-card-title">
+                                    <h4>${topic.name}</h4>
+                                    <i class="fa-solid fa-chevron-right"></i>
+                                </div>
+                                <p class="topic-card-desc">${topic.desc}</p>
+                            </div>
+                        </div>
+                    `;
+                });
+                container.appendChild(grid);
+            });
+        }
+
+        function handleSearch() {
+            const q = document.getElementById('searchInput').value.toLowerCase();
+            render(topics.filter(t => t.name.toLowerCase().includes(q) || t.category.toLowerCase().includes(q)));
+        }
+
+        function openTopic(name) {
+            localStorage.setItem('selectedTopic', name);
+            window.location.href = 'topic_detail.html';
+        }
+
+        render(topics);
+    </script>
+</body>
+
+</html>

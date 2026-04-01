@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DS Tutor AI - Chat History</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="config.js"></script>
+    <style>
+        .history-list-wide {
+            background: var(--white);
+            border-radius: 32px;
+            border: 1.5px solid var(--border);
+            overflow: hidden;
+            margin-top: 48px;
+        }
+
+        .history-item-wide {
+            padding: 32px 48px;
+            border-bottom: 1px solid var(--border);
+            display: grid;
+            grid-template-columns: 80px 1fr 180px;
+            align-items: center;
+            gap: 40px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .history-item-wide:last-child {
+            border-bottom: none;
+        }
+
+        .history-item-wide:hover {
+            background: var(--bg-light);
+        }
+
+        .history-icon-box {
+            width: 80px;
+            height: 80px;
+            background: #F0F9F6;
+            color: var(--teal-green);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+        }
+
+        .history-text-main {
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 8px;
+            color: var(--deep-navy);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .history-date {
+            font-size: 14px;
+            color: var(--subtext);
+            font-weight: 600;
+        }
+
+        .delete-btn-wide {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: #FEF2F2;
+            color: #EF4444;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .delete-btn-wide:hover {
+            background: #EF4444;
+            color: white;
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <a href="topics.html" class="sidebar-logo">
+                <i class="fa-solid fa-brain"></i>
+                <span>DS Tutor AI</span>
+            </a>
+
+            <nav class="nav-menu">
+                <a href="chat.html" class="nav-link">
+                    <i class="fa-solid fa-message"></i>
+                    <span>AI Chat Assistant</span>
+                </a>
+                <a href="topics.html" class="nav-link">
+                    <i class="fa-solid fa-book-open"></i>
+                    <span>Topic Explorer</span>
+                </a>
+                <a href="visualizer.html" class="nav-link">
+                    <i class="fa-solid fa-eye"></i>
+                    <span>Visualizers</span>
+                </a>
+                <a href="practice.html" class="nav-link">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                    <span>Practice & Quizzes</span>
+                </a>
+                <a href="profile.html" class="nav-link">
+                    <i class="fa-solid fa-user"></i>
+                    <span>Profile</span>
+                </a>
+                <a href="settings.html" class="nav-link">
+                    <i class="fa-solid fa-gear"></i>
+                    <span>Settings</span>
+                </a>
+            </nav>
+
+            <div style="margin-top: auto; padding-top: 24px;">
+                <p class="footer-text" style="text-align: left;">v 1.0.0</p>
+                <p class="footer-text" style="text-align: left; font-size: 12px;">Powered by SIMATS</p>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content animate-fade">
+            <div class="back-btn" onclick="history.back()">
+                <i class="fa-solid fa-arrow-left"></i>
+                <span>Back</span>
+            </div>
+            <header style="display: flex; align-items: center; justify-content: space-between;">
+                <div>
+                    <h1>Chat History</h1>
+                    <p style="color: var(--subtext);">Access all your previous AI learning sessions.</p>
+                </div>
+                <button class="btn btn-primary" onclick="window.location.href='chat.html'">New Chat Session</button>
+            </header>
+
+            <div class="history-list-wide" id="historyList">
+                <!-- Dynamically populated -->
+                <div style="padding: 100px; text-align: center; color: var(--subtext);">
+                    <i class="fa-solid fa-spinner fa-spin" style="font-size: 32px; margin-bottom: 24px;"></i>
+                    <p>Fetching your previous interactions...</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const userId = localStorage.getItem('userId');
+
+        let chatLookup = {}; // Secure memory store to prevent quote injection breaking the UI
+
+        async function fetchHistory() {
+            if (!userId) {
+                window.location.href = 'index.html';
+                return;
+            }
+            try {
+                const response = await fetch(`${CONFIG.BASE_URL}/chat_history/${userId}`);
+                const data = await response.json();
+
+                const container = document.getElementById('historyList');
+                container.innerHTML = '';
+                chatLookup = {}; // Reset
+
+                if (Array.isArray(data) && data.length > 0) {
+                    data.forEach(item => {
+                        // Securely store the content in memory, not in the HTML attribute
+                        chatLookup[item.id] = { q: item.question, a: item.answer };
+
+                        // Truncate question for UI
+                        const displayTitle = item.question.length > 60 ? item.question.substring(0, 60) + "..." : item.question;
+
+                        container.innerHTML += `
+                            <div class="history-item-wide" onclick="handleResume(${item.id})">
+                                <div class="history-icon-box">
+                                    <i class="fa-solid fa-message"></i>
+                                </div>
+                                <div style="overflow: hidden;">
+                                    <div class="history-text-main">${displayTitle}</div>
+                                    <div class="history-date">${item.created_at || 'Recent Session'}</div>
+                                </div>
+                                <div style="display: flex; justify-content: flex-end; align-items: center; gap: 24px;">
+                                    <div class="delete-btn-wide" onclick="event.stopPropagation(); deleteHistory(${item.id})">
+                                        <i class="fa-solid fa-trash-can"></i>
+                                    </div>
+                                    <i class="fa-solid fa-chevron-right" style="color: var(--border);"></i>
+                                </div>
+                            </div>
+                        `;
+                    });
+                } else {
+                    container.innerHTML = `<div style="padding: 100px; text-align: center; color: var(--subtext);">
+                        <i class="fa-solid fa-ghost" style="font-size: 48px; margin-bottom: 24px;"></i>
+                        <p>No chat history found. Start a new session!</p>
+                    </div>`;
+                }
+            } catch (error) {
+                console.error("Error fetching history:", error);
+            }
+        }
+
+        async function deleteHistory(id) {
+            if (!confirm("Remove this session from your history?")) return;
+            try {
+                const response = await fetch(`${CONFIG.BASE_URL}/delete_chat/${id}`, { method: 'DELETE' });
+                if (response.ok) {
+                    fetchHistory();
+                }
+            } catch (error) {
+                alert("Error deleting session.");
+            }
+        }
+
+        function handleResume(id) {
+            const chat = chatLookup[id];
+            if (chat) {
+                resumeChat(chat.q, chat.a);
+            }
+        }
+
+        function resumeChat(q, a) {
+            window.location.href = `chat.html?q=${encodeURIComponent(q)}&a=${encodeURIComponent(a)}`;
+        }
+
+        fetchHistory();
+    </script>
+</body>
+
+</html>

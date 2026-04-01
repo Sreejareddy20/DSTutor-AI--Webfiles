@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DS Tutor AI - Student Settings</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="config.js"></script>
+    <style>
+        .settings-card-wide {
+            max-width: 800px;
+            background: var(--white);
+            padding: 40px;
+            border-radius: 32px;
+            border: 1.5px solid var(--border);
+            margin-bottom: 32px;
+        }
+
+        .toggle-row-wide {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 24px 0;
+            border-bottom: 1px solid var(--bg-light);
+            cursor: pointer;
+        }
+
+        .toggle-row-wide:last-child {
+            border-bottom: none;
+        }
+
+        .action-row-wide {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 0;
+            border-bottom: 1px solid var(--bg-light);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            color: var(--deep-navy);
+        }
+
+        .action-row-wide:last-child {
+            border-bottom: none;
+        }
+
+        .action-row-wide:hover {
+            opacity: 0.7;
+        }
+
+        .toggle-box {
+            width: 56px;
+            height: 32px;
+            background: var(--border);
+            border-radius: 20px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-box::after {
+            content: '';
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            background: white;
+            border-radius: 50%;
+            top: 4px;
+            left: 4px;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .toggle-box.active {
+            background: var(--teal-green);
+        }
+
+        .toggle-box.active::after {
+            left: 28px;
+        }
+
+        .section-header-pill {
+            display: inline-flex;
+            padding: 6px 16px;
+            background: #F1F5F9;
+            color: #64748B;
+            border-radius: 100px;
+            font-size: 13px;
+            font-weight: 800;
+            margin-bottom: 24px;
+            text-transform: uppercase;
+        }
+
+        .danger-text {
+            color: #EF4444 !important;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <a href="topics.html" class="sidebar-logo">
+                <i class="fa-solid fa-brain"></i>
+                <span>DS Tutor AI</span>
+            </a>
+
+            <nav class="nav-menu">
+                <a href="chat.html" class="nav-link">
+                    <i class="fa-solid fa-message"></i>
+                    <span>AI Chat</span>
+                </a>
+                <a href="topics.html" class="nav-link">
+                    <i class="fa-solid fa-book-open"></i>
+                    <span>Topic Explorer</span>
+                </a>
+                <a href="visualizer.html" class="nav-link">
+                    <i class="fa-solid fa-eye"></i>
+                    <span>Visualizers</span>
+                </a>
+                <a href="practice.html" class="nav-link">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                    <span>Practice & Quizzes</span>
+                </a>
+                <a href="profile.html" class="nav-link">
+                    <i class="fa-solid fa-user"></i>
+                    <span>Profile</span>
+                </a>
+                <a href="settings.html" class="nav-link active">
+                    <i class="fa-solid fa-gear"></i>
+                    <span>Settings</span>
+                </a>
+            </nav>
+
+            <div style="margin-top: auto; padding-top: 24px;">
+                <p class="footer-text" style="text-align: left;">v 1.0.0</p>
+                <p class="footer-text" style="text-align: left; font-size: 12px;">Powered by SIMATS</p>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content animate-fade">
+            <div class="back-btn" onclick="history.back()">
+                <i class="fa-solid fa-arrow-left"></i>
+                <span>Back</span>
+            </div>
+
+            <header style="margin-bottom: 48px;">
+                <h1>System Settings</h1>
+                <p style="color: var(--subtext);">Configure your application preferences and manage your data.</p>
+            </header>
+
+            <div class="settings-card-wide">
+                <div class="section-header-pill">Appearance & UI</div>
+                <div class="toggle-row-wide" onclick="toggleOption('notifications')">
+                    <div>
+                        <h4 style="font-size: 16px; font-weight: 700;">Service Notifications</h4>
+                        <p style="color: var(--subtext); font-size: 14px;">Enable alerts for AI status and news.</p>
+                    </div>
+                    <div id="notifBox" class="toggle-box active"></div>
+                </div>
+            </div>
+
+            <div class="settings-card-wide">
+                <div class="section-header-pill">Data & History</div>
+                <a href="history.html" class="action-row-wide">
+                    <div>
+                        <h4 style="font-size: 16px; font-weight: 700;">Chat Archives</h4>
+                        <p style="color: var(--subtext); font-size: 14px;">View and manage previous AI interactions.</p>
+                    </div>
+                    <i class="fa-solid fa-chevron-right" style="color: var(--border);"></i>
+                </a>
+                <div class="action-row-wide" onclick="clearHistory()">
+                    <div>
+                        <h4 style="font-size: 16px; font-weight: 700; color: #EF4444;">Clear Learning History</h4>
+                        <p style="color: var(--subtext); font-size: 14px;">Permanently delete all archived chats.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="settings-card-wide">
+                <div class="section-header-pill">Security & Account</div>
+                <div class="action-row-wide" onclick="logout()">
+                    <div>
+                        <h4 style="font-size: 16px; font-weight: 700;">Log Out</h4>
+                        <p style="color: var(--subtext); font-size: 14px;">Sign out of your active session.</p>
+                    </div>
+                </div>
+                <div class="action-row-wide" onclick="deleteAccount()">
+                    <div>
+                        <h4 style="font-size: 16px; font-weight: 700; color: #EF4444;">Deactivate Account</h4>
+                        <p style="color: var(--subtext); font-size: 14px;">Permanently remove your user credentials and
+                            data.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top: 48px; color: var(--subtext); font-size: 14px;">
+                <p>App Version: 1.0.0</p>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const userId = localStorage.getItem('userId');
+
+        function toggleOption(type) {
+            const box = document.getElementById('notifBox');
+            box.classList.toggle('active');
+            localStorage.setItem(type, box.classList.contains('active'));
+        }
+
+        function logout() {
+            if (confirm("Are you sure you want to log out?")) {
+                localStorage.clear();
+                window.location.href = 'index.html';
+            }
+        }
+
+        async function clearHistory() {
+            if (confirm("This will permanently delete ALL archived conversations. Proceed?")) {
+                try {
+                    const response = await fetch(`${CONFIG.BASE_URL}/clear_chat_history/${userId}`, { method: 'DELETE' });
+                    if (response.ok) alert("History cleared.");
+                } catch (error) { alert("Error connecting to server."); }
+            }
+        }
+
+        async function deleteAccount() {
+            if (confirm("WARNING: This will permanently delete your account. Proceed?")) {
+                try {
+                    const response = await fetch(`${CONFIG.BASE_URL}/delete_account/${userId}`, { method: 'DELETE' });
+                    if (response.ok) {
+                        localStorage.clear();
+                        window.location.href = 'index.html';
+                    }
+                } catch (error) { alert("Error connecting to server."); }
+            }
+        }
+
+        window.onload = () => {
+            const nf = localStorage.getItem('notifications') === 'true';
+            if (nf) document.getElementById('notifBox').classList.add('active');
+        };
+    </script>
+</body>
+
+</html>

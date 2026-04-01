@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DS Tutor AI - Topic Detail</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="config.js"></script>
+    <style>
+        .detail-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .detail-header h1 {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--deep-navy);
+        }
+
+        .tab-row {
+            display: flex;
+            border-bottom: 2px solid var(--bg-light);
+            margin-bottom: 32px;
+            gap: 32px;
+        }
+
+        .tab {
+            padding: 12px 0;
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--footer);
+            cursor: pointer;
+            position: relative;
+            transition: all 0.2s ease;
+        }
+
+        .tab.active {
+            color: var(--deep-navy);
+        }
+
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--teal-green);
+            border-radius: 10px;
+        }
+
+        .explain-card {
+            background: #F0F9F6;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .explain-icon-box {
+            width: 48px;
+            height: 48px;
+            background: var(--teal-green);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .explain-icon-box i {
+            color: white;
+            font-size: 24px;
+        }
+
+        .explain-title {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--deep-navy);
+            margin-bottom: 12px;
+        }
+
+        .explain-text {
+            color: var(--subtext);
+            line-height: 1.6;
+            font-size: 15px;
+            margin-bottom: 16px;
+        }
+
+        .action-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .btn-action {
+            height: 56px;
+            border-radius: 12px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            cursor: pointer;
+            border: none;
+            color: white;
+            transition: all 0.2s ease;
+        }
+
+        .btn-blue {
+            background: #4285F4;
+        }
+
+        .btn-teal {
+            background: var(--teal-green);
+        }
+
+        .btn-outline-action {
+            background: transparent;
+            border: 1.5px solid var(--teal-green);
+            color: var(--teal-green);
+        }
+
+        .btn-white-action {
+            background: white;
+            border: 1.5px solid var(--border);
+            color: var(--deep-navy);
+        }
+
+        .operation-card {
+            background: #F8F9FA;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .complexity-badge {
+            background: #E8F5E9;
+            color: #2E7D32;
+            padding: 4px 12px;
+            border-radius: 100px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .code-container {
+            background: #0F172A;
+            border-radius: 16px;
+            padding: 24px;
+            color: #9CDCFE;
+            font-family: monospace;
+            line-height: 1.5;
+            white-space: pre;
+            overflow-x: auto;
+        }
+
+        .use-card {
+            background: #F3F7FA;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .use-number {
+            width: 32px;
+            height: 32px;
+            background: var(--teal-green);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <a href="topics.html" class="sidebar-logo">
+                <i class="fa-solid fa-brain" style="color: var(--teal-green);"></i>
+                <span style="color: var(--deep-navy); font-weight: 800;">DS Tutor AI</span>
+            </a>
+
+            <nav class="nav-menu">
+                <a href="chat.html" class="nav-link">
+                    <i class="fa-solid fa-message"></i>
+                    <span>Chat</span>
+                </a>
+                <a href="topics.html" class="nav-link active">
+                    <i class="fa-solid fa-book-open"></i>
+                    <span>Topics</span>
+                </a>
+                <a href="visualizer.html" class="nav-link">
+                    <i class="fa-solid fa-eye"></i>
+                    <span>Visualizer</span>
+                </a>
+                <a href="practice.html" class="nav-link">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                    <span>Practice</span>
+                </a>
+                <a href="profile.html" class="nav-link">
+                    <i class="fa-solid fa-user"></i>
+                    <span>Profile</span>
+                </a>
+            </nav>
+
+            <div style="margin-top: auto; padding-top: 24px; text-align: center;">
+                <p style="color: var(--footer); font-size: 14px; font-weight: 600;">Powered by SIMATS</p>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content animate-fade">
+            <div class="detail-header" onclick="history.back()" style="cursor: pointer;">
+                <i class="fa-solid fa-arrow-left" style="color: var(--deep-navy); font-size: 20px;"></i>
+                <h1 id="topicNameTitle">Topic</h1>
+            </div>
+
+            <div class="tab-row">
+                <div class="tab active" onclick="switchTab(0)">Explain</div>
+                <div class="tab" onclick="switchTab(1)">Operations</div>
+                <div class="tab" onclick="switchTab(2)">Code</div>
+                <div class="tab" onclick="switchTab(3)">Uses</div>
+            </div>
+
+            <div id="contentArea">
+                <!-- Content injected here -->
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const topicName = localStorage.getItem('selectedTopic') || 'Stack';
+        document.getElementById('topicNameTitle').innerText = topicName;
+
+        const contentData = {
+            "Stack": {
+                desc: "A Stack is a linear data structure that follows the Last In First Out (LIFO) principle. This means the last element added to the stack will be the first one to be removed.",
+                example: "Think of a stack of plates - you add plates on top and remove them from the top.",
+                ops: [
+                    { name: "Push", comp: "O(1)", desc: "Add an element to the top" },
+                    { name: "Pop", comp: "O(1)", desc: "Remove the top element" },
+                    { name: "Peek", comp: "O(1)", desc: "View the top element" }
+                ],
+                code: "class Stack:\n  def __init__(self):\n    self.items = []\n  def push(self, item):\n    self.items.append(item)\n  def pop(self):\n    return self.items.pop()",
+                uses: ["Undo functionality", "Function call management", "Expression parsing"]
+            },
+            "Array": {
+                desc: "An Array is a collection of items stored at contiguous memory locations. The idea is to store multiple items of the same type together.",
+                example: "Think of a bookshelf where each book has a fixed position or index.",
+                ops: [
+                    { name: "Access", comp: "O(1)", desc: "Direct access via index" },
+                    { name: "Search", comp: "O(n)", desc: "Scan all elements" },
+                    { name: "Insertion", comp: "O(n)", desc: "Requires shifting elements" }
+                ],
+                code: "arr = [10, 20, 30]\nprint(arr[0])\narr.append(40)",
+                uses: ["Storing related data", "Base for other structures", "CPU scheduling"]
+            }
+        };
+
+        function switchTab(index) {
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach((t, i) => t.classList.toggle('active', i === index));
+
+            const area = document.getElementById('contentArea');
+            const data = contentData[topicName] || contentData["Stack"];
+
+            if (index === 0) {
+                area.innerHTML = `
+                    <div class="explain-card">
+                        <div class="explain-icon-box"><i class="fa-solid fa-book"></i></div>
+                        <h2 class="explain-title">What is a ${topicName}?</h2>
+                        <p class="explain-text">${data.desc}</p>
+                        <p class="explain-text"><strong>Example:</strong> ${data.example}</p>
+                    </div>
+                    <div class="action-grid">
+                        <button class="btn-action btn-blue" onclick="location.href='visualizer.html'"><i class="fa-solid fa-eye"></i> Visualize</button>
+                        <button class="btn-action btn-teal" onclick="switchTab(2)"><i class="fa-solid fa-code"></i> Code</button>
+                    </div>
+                    <button class="btn-action btn-outline-action" style="width: 100%; margin-bottom: 16px;" onclick="location.href='practice.html'"><i class="fa-solid fa-lightbulb"></i> Practice Quiz</button>
+                    <button class="btn-action btn-white-action" style="width: 100%;" onclick="location.href='chat.html?q=Tell me more about ${topicName}'">Ask AI about ${topicName}</button>
+                `;
+            } else if (index === 1) {
+                area.innerHTML = data.ops.map(op => `
+                    <div class="operation-card">
+                        <div>
+                            <h4 style="color: var(--deep-navy); font-weight: 800; font-size: 16px;">${op.name}</h4>
+                            <p style="color: var(--subtext); font-size: 14px;">${op.desc}</p>
+                        </div>
+                        <div class="complexity-badge">${op.comp}</div>
+                    </div>
+                `).join('');
+            } else if (index === 2) {
+                area.innerHTML = `<div class="code-container">${data.code}</div>`;
+            } else if (index === 3) {
+                area.innerHTML = data.uses.map((use, i) => `
+                    <div class="use-card">
+                        <div class="use-number">${i + 1}</div>
+                        <p style="color: var(--deep-navy); font-weight: 600;">${use}</p>
+                    </div>
+                `).join('');
+            }
+        }
+
+        switchTab(0);
+    </script>
+</body>
+
+</html>
